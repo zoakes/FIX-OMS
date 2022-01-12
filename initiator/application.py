@@ -139,6 +139,7 @@ class Application(fix.Application):
 
         # ---------------------  Test Syntax ------------------------ #
 
+
         # Quick test (test any of the defined fields ^^)
         field = symbol  # 55=
         message.getField(field)  # 55=MSFT
