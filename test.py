@@ -5,7 +5,6 @@ import asyncio
 
 
 
-
 async def testing():
     print('Begin of Quickfix testing...')
 
