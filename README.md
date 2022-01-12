@@ -1,6 +1,6 @@
-# QuickFIX Python Samples #
+# QuickFIX Python OMS #
 * *Established connection by* [FIX protocol](https://www.fixtrading.org/standards/)  
-* *Author:* Rin Le <rinle.it [a] gmail.com>.  
+* *Author:* , zach_oakes@outlook.com (Forked from Rin Le <rinle.it [a] gmail.com>)
 * *Details:* [Configuration for quickfix](http://www.quickfixengine.org/quickfix/doc/html/configuration.html)  
 
 ## Requirements
