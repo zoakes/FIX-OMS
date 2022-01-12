@@ -10123,3 +10123,8 @@
 20220112-22:45:18.000000000 : Initiated logon request
 20220112-22:45:18.000000000 : Logon contains ResetSeqNumFlag=Y, reseting sequence numbers to 1
 20220112-22:45:18.000000000 : Received logon response
+20220112-23:49:32.000000000 : Created session
+20220112-23:49:32.000000000 : Connecting to 127.0.0.1 on port 3001 (Source :0)
+20220112-23:49:32.000000000 : Initiated logon request
+20220112-23:49:32.000000000 : Logon contains ResetSeqNumFlag=Y, reseting sequence numbers to 1
+20220112-23:49:32.000000000 : Received logon response
