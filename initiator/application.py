@@ -19,6 +19,7 @@ class Application(fix.Application):
     """FIX Application"""
     execID = 0
 
+    #region Admin Messages (On, Off, etc)
     def onCreate(self, sessionID):
         print("onCreate : Session (%s)" % sessionID.toString())
         return
@@ -41,6 +42,8 @@ class Application(fix.Application):
         msg = message.toString().replace(__SOH__, "|")
         logfix.info("(Admin) R << %s" % msg)
         return
+
+    #endregion
 
     def toApp(self, message, sessionID):
         ## Trades TO Server...
@@ -86,9 +89,8 @@ class Application(fix.Application):
         # likely only interested in execution reports -- for now receiving all.
         if msgType.getValue() == fix.MsgType_ExecutionReport:
             print("Execution Report Received")
-
-        # else:
-        #     return ## DONT need the rest of them
+        else:
+            return
 
         symbol = fix.Symbol()
         side = fix.Side()
@@ -137,9 +139,6 @@ class Application(fix.Application):
         else:
             print(" 0 Shares Remaining -- Order Completely Filled.")
 
-        # ---------------------  Test Syntax ------------------------ #
-
-
         # Quick test (test any of the defined fields ^^)
         field = symbol  # 55=
         message.getField(field)  # 55=MSFT
@@ -152,7 +151,9 @@ class Application(fix.Application):
         res = key.getValue()
         print("KEY-VAL Test: ", res)
 
-    # ------------------- Helpers ------------------ ##
+    # ------------------- OMS Helpers ------------------ ##
+
+    # region Send Order Helpers (Not needed)
 
     def genExecID(self):
         self.execID += 1
@@ -185,27 +186,20 @@ class Application(fix.Application):
         header = message.getHeader()
 
         # DOES this need SELL or SELLSHORT ? Or BOTH?
-        direction = fix.Side_BUY if side > 0 else fix.Side_SELL  ##43 = 1 buy, or 2 sell (?) (MIGHT need sellshort + sell?)
+        direction = fix.Side_BUY if side > 0 else fix.Side_SELL
 
         order_type = fix.OrdType_MARKET
         if _price:
             if _type.upper() == 'LMT':
                 order_type = fix.OrdType_LIMIT
-
             elif _type.upper() == 'STP':
                 order_type = fix.OrdType_STOP
-
             elif _type.upper() == 'MKT':
                 order_type = fix.OrdType_MARKET
-
             elif _price.upper() == 'STPLMT':
                 order_type = fix.OrdType_STOP_LIMIT
             else:
                 raise Exception(f"Order Type Not Supported -- Got:  '{_type}', Expected ['LMT', 'STP', 'MKT']")
-
-            # Add safety later (to ensure price matches WRT order type (Above limit, Below stop)
-            # if _price:
-            #     price = _price
 
         header.setField(fix.MsgType(fix.MsgType_NewOrderSingle))  # 39 = D?
 
@@ -229,23 +223,12 @@ class Application(fix.Application):
 
         fix.Session.sendToTarget(message, self.sessionID)
 
+    #endregion
+
     def run(self):
         """Run"""
         while 1:
             options = str(input("Please choose 1 for Put New Order or 2 for Exit!\n"))
-
-            # ---- REPLACE with SQL Read, (or non-blocking TCP Server)  ----- #
-
-            # TCP Sample: (See RithmicOMS tcp branch)
-            # asyncio.create_task(async_listen()) ## Likely needs a wait_for()
-
-            # THIS could be created outside loop,
-            # call an external task,
-            # that updates a global orders list (which we loop through here)
-
-            # Sample: (See RithmicOMS sql branch)
-            # orders = sqlClient.ParseOrders()
-            # if len(orders) > 0: ... SEND THEM + Mark Sent / Filled with events ^^
 
             ## Limit Buy (Example)
             if options == '1':
